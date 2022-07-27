@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mysql": {
+      "type": "mysql",
+      "connectionId": "ConnectionStrings:DefaultConnection"
+    }
+  }
+}

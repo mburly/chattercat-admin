@@ -1,0 +1,113 @@
+﻿@page
+@model Admin.Pages.HousekeepingModel
+@{
+	ViewData["Title"] = "Index";
+}
+
+@{
+	@using Admin.Models;
+	@using MySql.Data;
+	@using MySql.Data.MySqlClient
+	MySqlConnection conn = new MySqlConnection("server=localhost;port=3306;database=cc_xqc;uid=root;password=;");
+	conn.Open();
+	string sql = "SELECT * FROM emotes ORDER BY count DESC";
+	MySqlCommand cmd = new MySqlCommand(sql, conn);
+	MySqlDataReader rdr = cmd.ExecuteReader();
+}
+
+<html>
+	<head>
+
+	</head>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Code</th>
+			<th>Emote ID</th>
+			<th>Count</th>
+			<th>Image</th>
+			<th>URL</th>
+			<th>Path</th>
+			<th>Date Added</th>
+			<th>Source</th>
+			<th>Active</th>
+		</tr>
+	@while (rdr.Read())
+	{
+	Emote e = new Emote(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), Int32.Parse(rdr[3].ToString()), rdr[4].ToString(), rdr[5].ToString(), rdr[6].ToString(), Int32.Parse(rdr[7].ToString()), rdr[8].ToString());
+	<tr>
+		<td>@e.Id</td>
+		<td>@e.Code</td>
+		<td>@e.Emote_Id</td>
+		<td>@e.Count</td>
+		<td><img style="height:64px;width:64px;" src="@e.Url" /></td>
+		<td>@e.Url</td>
+		<td>@e.Path</td>
+		<td>@e.Date_Added</td>
+		<td>@e.Source</td>
+		<td>@e.Active</td>
+	</tr>
+	/*<h3>@(rdr[1].ToString())</h3>
+	<h3>@(rdr[2].ToString())</h3>
+	<h3>@(rdr[3].ToString())</h3>
+	<h3>@(rdr[4].ToString())</h3>
+	<h3>@(rdr[5].ToString())</h3>
+	<h3>@(rdr[6].ToString())</h3>
+	<h3>@(rdr[7].ToString())</h3>
+	<h3>@(rdr[8].ToString())</h3>*/
+	}
+	</table>
+<div class="holder">
+	<div class="tools">
+		<div class="tool-group">
+			<div class="tool-group-title">
+				Chatter settings
+			</div>
+			<div class="tool-group-tools">
+				<ul class="tool-items">
+					<li class="tool-item">Manage chatters</li>
+					<li class="tool-item">Chat logs</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="tool-group">
+			<div class="tool-group-title">
+				Emote settings
+			</div>
+			<div class="tool-group-tools">
+				<ul class="tool-items">
+					<li class="tool-item">Manage emotes</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="tool-group">
+			<div class="tool-group-title">
+				Session settings
+			</div>
+			<div class="tool-group-tools">
+				<ul class="tool-items">
+					<li class="tool-item">Manage sessions</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="tool-group">
+			<div class="tool-group-title">
+				User settings
+			</div>
+			<div class="tool-group-tools">
+				<ul class="tool-items">
+					<li class="tool-item">Manage users</li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	<div class="main-content">
+			opskfokpfkop
+		</div>
+	</div>
+
+</html>

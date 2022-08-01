@@ -1,0 +1,154 @@
+﻿@page
+@model Admin.Pages.HousekeepingModel
+@{
+	ViewData["Title"] = "Index";
+}
+
+@{
+	@using Admin.Models;
+	@using MySql.Data;
+	@using MySql.Data.MySqlClient
+	MySqlConnection conn = new MySqlConnection("server=localhost;port=3306;database=cc_xqc;uid=root;password=;");
+	conn.Open();
+	string sql = "SELECT * FROM emotes ORDER BY count DESC";
+	MySqlCommand cmd = new MySqlCommand(sql, conn);
+	MySqlDataReader rdr = cmd.ExecuteReader();
+
+	List<string> GetDatabases()
+	{
+		List<string> databases = new List<string>();
+		MySqlConnection conn = new MySqlConnection("server=localhost;port=3306;uid=root;password=;");
+		conn.Open();
+		string sql = "SHOW DATABASES";
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		while(rdr.Read())
+		{
+			string db = rdr[0].ToString();
+			if (db.Contains("cc_") && !db.Contains("housekeeping"))
+			{
+				databases.Add(rdr[0].ToString());
+			}
+		}
+		return databases;
+	}
+
+	List<string> GetStreams()
+	{
+		List<string> streams = new List<string>();
+		using (StreamReader sr = new StreamReader(FileRoot.Streams))
+		{
+				while (!sr.EndOfStream)
+				{
+					streams.Add(sr.ReadLine());
+				}
+		}
+		return streams;
+	}
+}
+
+<html>
+	<head>
+
+	</head>
+	@while (rdr.Read())
+	{
+	Emote e = new Emote(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), Int32.Parse(rdr[3].ToString()), rdr[4].ToString(), rdr[5].ToString(), rdr[6].ToString(), Int32.Parse(rdr[7].ToString()), rdr[8].ToString());
+	/*<tr>
+		<td>@e.Id</td>
+		<td>@e.Code</td>
+		<td>@e.Emote_Id</td>
+		<td>@e.Count</td>
+		<td><img style="height:64px;width:64px;" src="@e.Url" /></td>
+		<td>@e.Url</td>
+		<td>@e.Path</td>
+		<td>@e.Date_Added</td>
+		<td>@e.Source</td>
+		<td>@e.Active</td>
+	</tr>*/
+	/*<h3>@(rdr[1].ToString())</h3>
+	<h3>@(rdr[2].ToString())</h3>
+	<h3>@(rdr[3].ToString())</h3>
+	<h3>@(rdr[4].ToString())</h3>
+	<h3>@(rdr[5].ToString())</h3>
+	<h3>@(rdr[6].ToString())</h3>
+	<h3>@(rdr[7].ToString())</h3>
+	<h3>@(rdr[8].ToString())</h3>*/
+	}
+	<body>
+		<div class="holder">
+			<div class="tools">
+				
+				<div class="tool-group">
+					<div class="tool-group-title">
+						Chatter settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top">Manage chatters</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item tool-item-bottom">Chat logs</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Emote settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom">Manage emotes</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Session settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom">Manage sessions</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						User settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom">Manage users</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+			<div class="main-content">
+				<div class="databases-holder">
+					<div class="databases-list">
+					@{
+						List<string> databases = GetDatabases();
+						for (int i = 0; i < databases.Count; i++)
+						{
+							if(i == 0)
+							{
+								<div class="database">@databases[i].Remove(0,3)</div>
+							}
+							else
+							{
+								<div class="database database-not-first">@databases[i].Remove(0,3)</div>
+							}
+						}
+					}
+					</div>
+				</div>
+			</div>
+			</div>
+	</body>
+</html>

@@ -2,12 +2,6 @@ html {
     font-size: 14px;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
 html {
     position: relative;
     margin: 0;
@@ -37,9 +31,11 @@ body {
 
 .tool-group {
     width: 300px;
-    margin-bottom: 5%;
-    margin-bottom: 3%;
     font-size: 14px;
+}
+
+.not-top {
+    margin-top:20px;
 }
 
 .tool-group-title {
@@ -52,11 +48,9 @@ body {
 }
 
 .tool-group-tools {
-    border: 2px solid black;
 }
 
 .tool-item {
-    margin-left: 1%;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -72,17 +66,58 @@ body {
         cursor: pointer;
     }
 
+.tool-item-top {
+    border-top:2px solid black;
+}
+
+.tool-item-bottom {
+    border-bottom:2px solid black;
+}
+
 .tool-items {
     list-style-type: none;
     padding-left: 0;
     height: 100%;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
 }
 
 .holder {
-    display: flex;
+    display:flex;
+    height:100%;
+    border:1px solid purple;
 }
 
 .main-content {
     border: 2px solid red;
     width: 100%;
+    user-select:none;
+}
+
+.databases-holder {
+    text-align:center;
+}
+
+.databases-list {
+    display:inline-block;
+    border:1px solid black;
+    height:fit-content;
+    margin-top:10px;
+}
+
+.database {
+    background-color: rebeccapurple;
+    color: white;
+    display: inline;
+    user-select: text;
+    padding:3px 3px 3px 3px;
+    border-radius:0.4rem;
+}
+
+.database:hover {
+    cursor:pointer;
+}
+
+.database-not-first {
+    margin-left:5px;
 }

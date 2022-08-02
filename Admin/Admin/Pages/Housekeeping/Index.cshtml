@@ -8,11 +8,11 @@
 	@using Admin.Models;
 	@using MySql.Data;
 	@using MySql.Data.MySqlClient
-	MySqlConnection conn = new MySqlConnection("server=localhost;port=3306;database=cc_xqc;uid=root;password=;");
+	/*MySqlConnection conn = new MySqlConnection("server=localhost;port=3306;database=cc_xqc;uid=root;password=;");
 	conn.Open();
 	string sql = "SELECT * FROM emotes ORDER BY count DESC";
 	MySqlCommand cmd = new MySqlCommand(sql, conn);
-	MySqlDataReader rdr = cmd.ExecuteReader();
+	MySqlDataReader rdr = cmd.ExecuteReader();*/
 
 	List<string> GetDatabases()
 	{
@@ -51,9 +51,9 @@
 	<head>
 
 	</head>
-	@while (rdr.Read())
-	{
-	Emote e = new Emote(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), Int32.Parse(rdr[3].ToString()), rdr[4].ToString(), rdr[5].ToString(), rdr[6].ToString(), Int32.Parse(rdr[7].ToString()), rdr[8].ToString());
+	@{//while (rdr.Read())
+	//{
+	//Emote e = new Emote(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), Int32.Parse(rdr[3].ToString()), rdr[4].ToString(), rdr[5].ToString(), rdr[6].ToString(), Int32.Parse(rdr[7].ToString()), rdr[8].ToString());
 	/*<tr>
 		<td>@e.Id</td>
 		<td>@e.Code</td>
@@ -76,6 +76,7 @@
 	<h3>@(rdr[8].ToString())</h3>*/
 	}
 	<body>
+		<h1>@RouteData.Values["HousekeepingTemplate"]</h1>
 		<div class="holder">
 			<div class="tools">
 				
@@ -129,26 +130,27 @@
 				</div>
 
 			</div>
-			<div class="main-content">
+			<div class="main-content-holder">
 				<div class="databases-holder">
 					<div class="databases-list">
 					@{
 						List<string> databases = GetDatabases();
 						for (int i = 0; i < databases.Count; i++)
 						{
+							string database = databases[i].Remove(0, 3);
 							if(i == 0)
 							{
-								<div class="database">@databases[i].Remove(0,3)</div>
+								<div class="database"><a href="/Housekeeping/Manage/@database">@database</a></div>
 							}
 							else
 							{
-								<div class="database database-not-first">@databases[i].Remove(0,3)</div>
+								<div class="database database-not-first"><a href="/Housekeeping/Manage/@database">@database</a></div>
 							}
 						}
 					}
 					</div>
 				</div>
 			</div>
-			</div>
+		</div>
 	</body>
 </html>

@@ -1,6 +1,7 @@
 using Admin.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,27 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddRazorPages();
+
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AddFolderRouteModelConvention("/Housekeeping", model =>
+    {
+        var selectorCount = model.Selectors.Count;
+        for (var i = 0; i < selectorCount; i++)
+        {
+            var selector = model.Selectors[i];
+            model.Selectors.Add(new SelectorModel
+            {
+                AttributeRouteModel = new AttributeRouteModel
+                {
+                    Template = AttributeRouteModel.CombineTemplates(
+                        selector.AttributeRouteModel!.Template,
+                        "{HousekeepingTemplate?}"),
+                }
+            });
+        }
+    });
+});
 
 builder.Services.AddAuthorization(options =>
 {

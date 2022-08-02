@@ -1,0 +1,161 @@
+﻿@page
+@model Admin.Pages.Housekeeping.ManageModel
+@{
+	string channel = String.Empty;
+	try
+	{
+		channel = RouteData.Values["HousekeepingTemplate"].ToString();
+	}
+	catch
+	{
+		Response.Redirect("/Housekeeping");
+	}
+	string db = $"cc_{channel}";
+	@using MySql.Data.MySqlClient
+
+	bool IsOnline()
+	{
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		conn.Open();
+		string sql = "SELECT end_datetime FROM sessions ORDER BY ID DESC LIMIT 1";
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		string on = String.Empty;
+		while(rdr.Read())
+		{
+			on = rdr[0].ToString();
+		}
+		return on == String.Empty;
+	}
+
+	string status = String.Empty;
+	try
+	{
+		if(IsOnline())
+		{
+			status = "online";
+		}
+		else
+		{
+			status = "offline";
+		}
+	}
+	catch
+	{
+		Response.Redirect("/Housekeeping");
+	}
+}
+
+<html>
+	<head>
+
+	</head>
+	<body>
+		<div class="holder">
+			<div class="tools">
+				
+				<div class="tool-group">
+					<div class="tool-group-title">
+						Chatter settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top">Manage chatters</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item tool-item-bottom">Chat logs</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Emote settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom">Manage emotes</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Session settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom">Manage sessions</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						User settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom">Manage users</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+			<div class="main-content-holder">
+				
+				<div class="manage-holder">
+					<div class="banner">
+						<h1>@channel</h1>
+						<span id="statusText">currently @status</span>
+					</div>
+
+					<div class="settings-holder">
+						<div class="settings-group">
+							<div class="setting">
+								<div class="setting-title">
+									Chatters
+								</div>
+								<div class="setting-body">
+									fpodsfjpsdpjofjpofjposdjfposdjpo
+								</div>
+							</div>
+							<div class="setting setting-second">
+								<div class="setting-title">
+									Emotes
+								</div>
+								<div class="setting-body">
+									fpodsfjpsdpjofjpofjposdjfposdjpo
+								</div>
+							</div>
+							<div class="setting">
+								<div class="setting-title">
+									Sessions
+								</div>
+								<div class="setting-body">
+									fpodsfjpsdpjofjpofjposdjfposdjpo
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="settings-holder">
+						<div class="settings-group">
+							<div class="setting">
+								<div class="setting-title">
+									Users
+								</div>
+								<div class="setting-body">
+									fpodsfjpsdpjofjpofjposdjfposdjpo
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</body>
+</html>

@@ -12,6 +12,7 @@
 	}
 	string db = $"cc_{channel}";
 	@using MySql.Data.MySqlClient
+	@using Admin.Models
 
 	bool IsOnline()
 	{
@@ -25,10 +26,63 @@
 		{
 			on = rdr[0].ToString();
 		}
+		conn.Close();
 		return on == String.Empty;
 	}
 
+	List<Emote> GetTopEmotes()
+	{
+		List<Emote> top_emotes = new List<Emote>();
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		conn.Open();
+		string sql = "CALL topEmotes";
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		while(rdr.Read())
+		{
+			top_emotes.Add(new Emote(rdr[0].ToString(), Int32.Parse(rdr[1].ToString()), rdr[2].ToString()));
+		}
+		conn.Close();
+		return top_emotes;
+	}
+
+	List<Chatter> GetTopChatters()
+	{
+		List<Chatter> top_chatters = new List<Chatter>();
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		conn.Open();
+		string sql = "CALL topChatters";
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		while(rdr.Read())
+		{
+			top_chatters.Add(new Chatter(rdr[0].ToString(), Int32.Parse(rdr[1].ToString())));
+		}
+		conn.Close();
+		return top_chatters;
+	}
+
+	List<Session> GetRecentSessions()
+	{
+		List<Session> recent_sessions = new List<Session>();
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		conn.Open();
+		string sql = "CALL recentSessions";
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		while(rdr.Read())
+		{
+			recent_sessions.Add(new Session(rdr[0].ToString(), rdr[1].ToString()));
+		}
+		conn.Close();
+		return recent_sessions;
+	}
+
 	string status = String.Empty;
+	List<Emote> top_emotes = new List<Emote>();
+	List<Chatter> top_chatters = new List<Chatter>();
+	List<Session> recent_sessions = new List<Session>();
+
 	try
 	{
 		if(IsOnline())
@@ -39,11 +93,16 @@
 		{
 			status = "offline";
 		}
+
+		top_emotes = GetTopEmotes();
+		top_chatters = GetTopChatters();
+		recent_sessions = GetRecentSessions();
 	}
 	catch
 	{
 		Response.Redirect("/Housekeeping");
 	}
+
 }
 
 <html>
@@ -115,40 +174,137 @@
 					<div class="settings-holder">
 						<div class="settings-group">
 							<div class="setting">
-								<div class="setting-title">
+								<div class="setting-header">
 									Chatters
 								</div>
 								<div class="setting-body">
-									fpodsfjpsdpjofjpofjposdjfposdjpo
+									<div class="setting-title">
+										Top 10 Chatters
+									</div>
+									<div class="setting-content-holder">
+										<table class="rank-table">
+										@{
+											for (int i = 0; i < top_chatters.Count; i++)
+											{
+												int rank = i + 1;
+												string message_count = @top_chatters[i].Message_Count.ToString("N0");
+																		<tr>
+																				@{
+														if(i == 0)
+														{
+																													<td class="rank-number rank-number-first rank-first">@rank</td>
+																													<td class="rank-first">@top_chatters[i].Username</td>
+																													<td class="rank-first">@message_count</td>
+														}
+														else if(i == 1)
+														{
+																													<td class="rank-number rank-number-second rank-second">@rank</td>
+																													<td class="rank-second">@top_chatters[i].Username</td>
+																													<td class="rank-second">@message_count</td>
+														}
+														else if(i == 2)
+														{
+																													<td class="rank-number rank-number-third rank-third">@rank</td>
+																													<td class="rank-third">@top_chatters[i].Username</td>
+																													<td class="rank-third">@message_count</td>
+														}
+														else
+														{
+																													<td class="rank-number">@rank</td>
+																													<td>@top_chatters[i].Username</td>
+																													<td>@message_count</td>
+														}
+																				}
+																			</tr>
+											}
+										}
+										</table>
+									</div>
 								</div>
 							</div>
 							<div class="setting setting-second">
-								<div class="setting-title">
+								<div class="setting-header">
 									Emotes
 								</div>
 								<div class="setting-body">
-									fpodsfjpsdpjofjpofjposdjfposdjpo
+									<div class="setting-title">
+										Top 10 Emotes
+									</div>
+									<div class="setting-content-holder">
+										<table class="rank-table">
+										@{
+											for (int i = 0; i < top_emotes.Count; i++)
+											{
+												int rank = i + 1;
+												string count = top_emotes[i].Count.ToString("N0");
+																		<tr>
+																				@{
+														if(i == 0)
+														{
+																													<td class="rank-number rank-number-first rank-first">@rank</td>
+																													<td class="rank-first"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
+																													<td class="rank-first">@top_emotes[i].Code</td>
+																													<td class="rank-first">@count</td>
+														}
+														else if(i == 1)
+														{
+																													<td class="rank-number rank-number-second rank-second">@rank</td>
+																													<td class="rank-second"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
+																													<td class="rank-second">@top_emotes[i].Code</td>
+																													<td class="rank-second">@count</td>
+														}
+														else if(i == 2)
+														{
+																													<td class="rank-number rank-number-third rank-third">@rank</td>
+																													<td class="rank-third"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
+																													<td class="rank-third">@top_emotes[i].Code</td>
+																													<td class="rank-third">@count</td>
+														}
+														else
+														{
+																													<td class="rank-number">@rank</td>
+																													<td><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
+																													<td>@top_emotes[i].Code</td>
+																													<td>@count</td>
+														}
+																				}
+																			</tr>
+											}
+										}
+										</table>
+									</div>
 								</div>
 							</div>
 							<div class="setting">
-								<div class="setting-title">
+								<div class="setting-header">
 									Sessions
 								</div>
 								<div class="setting-body">
-									fpodsfjpsdpjofjpofjposdjfposdjpo
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="settings-holder">
-						<div class="settings-group">
-							<div class="setting">
-								<div class="setting-title">
-									Users
-								</div>
-								<div class="setting-body">
-									fpodsfjpsdpjofjpofjposdjfposdjpo
+									<div class="setting-title">
+										Last 5 Sessions
+									</div>
+									<div class="setting-content-holder">
+										<table>
+										@{
+											for (int i = 0; i < recent_sessions.Count; i++)
+											{
+																		<tr>
+																			<td style="width:50%;">@recent_sessions[i].Title</td>
+																			@{
+																if(i == 0 && status == "online")
+																{
+																							<td style="width:100%"><div class="live"><div class="circle pulse"></div>LIVE</div></td>
+																}
+																else
+																{
+																							<td style="width:100%;"><div style="float:right;">@recent_sessions[i].Start_Datetime.Split(' ')[0]</div></td>
+																}
+																			}
+																		</tr>
+											}
+										}
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>

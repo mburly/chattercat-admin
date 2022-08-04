@@ -24,5 +24,12 @@
             Source = source;
             Active = active;
         }
+
+        public Emote(string code, int count, string path)
+        {
+            Code = code;
+            Count = count;
+            Path = path;
+        }
     }
 }

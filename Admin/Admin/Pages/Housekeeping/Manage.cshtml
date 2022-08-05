@@ -167,7 +167,7 @@
 				
 				<div class="manage-holder">
 					<div class="banner">
-						<h1>@channel</h1>
+						<h1><span>@channel</span></h1>
 						<span id="statusText">currently @status</span>
 					</div>
 
@@ -179,7 +179,7 @@
 								</div>
 								<div class="setting-body">
 									<div class="setting-title">
-										Top 10 Chatters
+										Most Active Chatters
 									</div>
 									<div class="setting-content-holder">
 										<table class="rank-table">
@@ -188,34 +188,34 @@
 											{
 												int rank = i + 1;
 												string message_count = @top_chatters[i].Message_Count.ToString("N0");
-																		<tr>
-																				@{
+																					<tr>
+																							@{
 														if(i == 0)
 														{
-																													<td class="rank-number rank-number-first rank-first">@rank</td>
-																													<td class="rank-first">@top_chatters[i].Username</td>
-																													<td class="rank-first">@message_count</td>
+																																			<td class="rank-number">@rank</td>
+																																			<td class="">@top_chatters[i].Username</td>
+																																			<td class="">@message_count</td>
 														}
 														else if(i == 1)
 														{
-																													<td class="rank-number rank-number-second rank-second">@rank</td>
-																													<td class="rank-second">@top_chatters[i].Username</td>
-																													<td class="rank-second">@message_count</td>
+																																			<td class="rank-number">@rank</td>
+																																			<td class="">@top_chatters[i].Username</td>
+																																			<td class="">@message_count</td>
 														}
 														else if(i == 2)
 														{
-																													<td class="rank-number rank-number-third rank-third">@rank</td>
-																													<td class="rank-third">@top_chatters[i].Username</td>
-																													<td class="rank-third">@message_count</td>
+																																			<td class="rank-number">@rank</td>
+																																			<td class="">@top_chatters[i].Username</td>
+																																			<td class="">@message_count</td>
 														}
 														else
 														{
-																													<td class="rank-number">@rank</td>
-																													<td>@top_chatters[i].Username</td>
-																													<td>@message_count</td>
+																																			<td class="rank-number">@rank</td>
+																																			<td>@top_chatters[i].Username</td>
+																																			<td>@message_count</td>
 														}
-																				}
-																			</tr>
+																							}
+																						</tr>
 											}
 										}
 										</table>
@@ -237,38 +237,38 @@
 											{
 												int rank = i + 1;
 												string count = top_emotes[i].Count.ToString("N0");
-																		<tr>
-																				@{
+																					<tr>
+																							@{
 														if(i == 0)
 														{
-																													<td class="rank-number rank-number-first rank-first">@rank</td>
-																													<td class="rank-first"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
-																													<td class="rank-first">@top_emotes[i].Code</td>
-																													<td class="rank-first">@count</td>
+																																			<td class="rank-number rank-number-first rank-first">@rank</td>
+																																			<td class="rank-first"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
+																																			<td class="rank-first">@top_emotes[i].Code</td>
+																																			<td class="rank-first">@count</td>
 														}
 														else if(i == 1)
 														{
-																													<td class="rank-number rank-number-second rank-second">@rank</td>
-																													<td class="rank-second"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
-																													<td class="rank-second">@top_emotes[i].Code</td>
-																													<td class="rank-second">@count</td>
+																																			<td class="rank-number rank-number-second rank-second">@rank</td>
+																																			<td class="rank-second"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
+																																			<td class="rank-second">@top_emotes[i].Code</td>
+																																			<td class="rank-second">@count</td>
 														}
 														else if(i == 2)
 														{
-																													<td class="rank-number rank-number-third rank-third">@rank</td>
-																													<td class="rank-third"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
-																													<td class="rank-third">@top_emotes[i].Code</td>
-																													<td class="rank-third">@count</td>
+																																			<td class="rank-number rank-number-third rank-third">@rank</td>
+																																			<td class="rank-third"><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
+																																			<td class="rank-third">@top_emotes[i].Code</td>
+																																			<td class="rank-third">@count</td>
 														}
 														else
 														{
-																													<td class="rank-number">@rank</td>
-																													<td><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
-																													<td>@top_emotes[i].Code</td>
-																													<td>@count</td>
+																																			<td class="rank-number">@rank</td>
+																																			<td><img class="emote" src="https://localhost/chatcat/@top_emotes[i].Path" /></td>
+																																			<td>@top_emotes[i].Code</td>
+																																			<td>@count</td>
 														}
-																				}
-																			</tr>
+																							}
+																						</tr>
 											}
 										}
 										</table>
@@ -288,19 +288,19 @@
 										@{
 											for (int i = 0; i < recent_sessions.Count; i++)
 											{
-																		<tr>
-																			<td style="width:50%;">@recent_sessions[i].Title</td>
-																			@{
-																if(i == 0 && status == "online")
-																{
-																							<td style="width:100%"><div class="live"><div class="circle pulse"></div>LIVE</div></td>
+															<tr>
+																<td style="width:99%">@recent_sessions[i].Title</td>
+																@{
+														if(i == 0 && status == "online")
+														{
+																					<td style="width:1%"><div class="live"><div class="circle pulse"></div>LIVE</div></td>
+														}
+														else
+														{
+																					<td style="width:1%;"><div style="float:right;">@recent_sessions[i].Start_Datetime.Split(' ')[0]</div></td>
+														}
 																}
-																else
-																{
-																							<td style="width:100%;"><div style="float:right;">@recent_sessions[i].Start_Datetime.Split(' ')[0]</div></td>
-																}
-																			}
-																		</tr>
+														</tr>
 											}
 										}
 										</table>

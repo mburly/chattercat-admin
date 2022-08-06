@@ -1,0 +1,177 @@
+﻿@page
+@model Admin.Pages.Housekeeping.Manage.EmotesModel
+@{
+	string channel = String.Empty;
+	try
+	{
+		channel = RouteData.Values["HousekeepingTemplate"].ToString();
+	}
+	catch
+	{
+		Response.Redirect("/Housekeeping");
+	}
+
+	string db = $"cc_{channel}";
+	@using Admin.Models;
+	@using MySql.Data.MySqlClient;
+
+	List<Emote> GetEmotes()
+	{
+		List<Emote> emotes = new List<Emote>();
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		conn.Open();
+		string sql = "SELECT code, count, url, path, date_added, source, active FROM emotes ORDER BY count DESC;";
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		while(rdr.Read())
+		{
+			emotes.Add(new Emote(rdr[0].ToString(), Int32.Parse(rdr[1].ToString()), rdr[2].ToString(), rdr[3].ToString(), rdr[4].ToString(), Int32.Parse(rdr[5].ToString()), bool.Parse(rdr[6].ToString())));
+		}
+		return emotes;
+	}
+
+	List<Emote> emotes = new List<Emote>();
+
+	try
+	{
+		emotes = GetEmotes();
+	}
+	catch
+	{
+		Response.Redirect("/Housekeeping");
+	}
+}
+<html>
+	<head></head>
+	<body>
+		<div class="holder">
+			<div class="tools">	
+				<div class="tool-group">
+					<div class="tool-group-title">
+						Chatter settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top">Manage chatters</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item">Chat logs</li>
+							<li class="tool-item tool-item-bottom">Chat logs</li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Emote settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom tool-item-current">Manage emotes</li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Session settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom">Manage sessions</li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						User settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom">Manage users</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="main-content-holder">
+
+				<div class="manage-holder">
+
+					<div class="banner">
+							<h1 class="banner-channel-name">@channel</h1>
+							<div class="banner-back"><a href="/Housekeeping/Manage/@channel">Return to dashboard</a></div>
+							<div class="banner-back button-not-last"><a href="/Housekeeping/Manage/Emotes/@channel"><i class="fa-solid fa-arrows-rotate"></i></a></div>
+					</div>
+
+					<div class="settings-holder">
+						<table class="table table-striped">
+							<tr>
+								<th></th>
+								<th>Code</th>
+								<th>Count</th>
+								<th>URL</th>
+								<th>Path</th>
+								<th>Date Added</th>
+								<th>Source</th>
+								<th>Status</th>
+								<th></th>
+							</tr>
+					@{
+						foreach (Emote e in emotes)
+						{
+								<tr>
+								<td><img class="manage-emote" src="https://localhost/chatcat/@e.Path" /></td>
+								<td>@e.Code</td>
+								<td>@e.Count</td>
+								<td>@e.Url</td>
+								<td>@e.Path</td>
+								<td>@e.Date_Added.Split(' ')[0]</td>
+								@{
+									if(e.Source == 1)
+									{
+										<td><span class="badge badge-twitch">Twitch</span></td>
+									}
+									else if(e.Source == 2)
+									{
+										<td><span class="badge badge-twitch">Subscriber</span></td>
+									}
+									else if(e.Source == 3)
+									{
+										<td><span class="badge badge-ffz">FFZ</span></td>
+									}
+									else if(e.Source == 4)
+									{
+										<td><span class="badge badge-ffz">FFZ</span></td>
+									}
+									else if(e.Source == 5)
+									{
+										<td><span class="badge badge-bttv">BTTV</span></td>
+									}
+									else if(e.Source == 6)
+									{
+										<td><span class="badge badge-bttv">BTTV</span></td>
+									}
+									if(e.Active)
+									{
+										<td><span class="badge rounded-pill badge-enabled">Enabled</span></td>
+									}
+									else
+									{
+										<td><span class="badge rounded-pill badge-disabled">Disabled</span></td>
+									}
+									}
+									<td>
+									<span class="fa-stack fa-1x" style="flex-shrink: 0;">
+									<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-ban fa-stack-1x fa-inverse"></i>
+									</span>
+									</td>
+								</tr>
+						}
+					}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

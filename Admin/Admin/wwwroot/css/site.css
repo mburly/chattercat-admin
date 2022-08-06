@@ -68,6 +68,10 @@ a, a:hover, a:focus, a:active {
         cursor: pointer;
     }
 
+.tool-item-current {
+    background-color: #bdc5cd;
+}
+
 .tool-item-top {
     border-top:2px solid black;
 }
@@ -142,12 +146,12 @@ a, a:hover, a:focus, a:active {
 
 .settings-holder {
     border:2px solid green;
-    margin-top:40px;
 }
 
 .settings-group {
     border:2px solid cyan;
     width:fit-content;
+    margin-top:40px;
     margin-left:auto;
     margin-right:auto;
 }
@@ -239,6 +243,55 @@ a, a:hover, a:focus, a:active {
     border-spacing: 0 0.5rem;
 }
 
+.manage-emote {
+    height:32px;
+    width:32px;
+}
+
+.badge-twitch {
+    background-color: #9146FF;
+}
+
+.badge-bttv {
+    background-color: #bd1c13;
+}
+
+.badge-ffz {
+    background-color: #68442C;
+}
+
+.badge-enabled {
+    background-color: #198754;
+}
+
+.badge-disabled {
+    background-color: #6c757d;
+}
+
+.side-link {
+    display:inline-block;
+    width:100%;
+}
+
+.banner-channel-name {
+    display:inline-block;
+}
+
+.banner-back {
+    background-color:rebeccapurple;
+    border:1px solid black;
+    padding:5px;
+    border-radius:5%;
+    float:right;
+}
+
+.tool-neutral {
+    color: #6c757d;
+}
+
+.button-not-last {
+    margin-right:5px;
+}
 
 
 

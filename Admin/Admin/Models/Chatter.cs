@@ -7,15 +7,13 @@
         public string First_Date { get; set; }
         public string Last_Date { get; set; }
         public int Message_Count { get; set; }
-
-        public Chatter(int id, string username, string first_Date, string last_Date)
+        public Chatter(int id, string username, string first_date, string last_date)
         {
             Id = id;
             Username = username;
-            First_Date = first_Date;
-            Last_Date = last_Date;
+            First_Date = first_date;
+            Last_Date = last_date;
         }
-
         public Chatter(string username, int message_count)
         {
             Username = username;

@@ -7,18 +7,20 @@
         public string Start_Datetime { get; set; }
         public string End_Datetime { get; set; }
 
-        public Session(int id, string title, string start_Datetime, string end_Datetime)
+        public string Length { get; set; }
+
+        public Session(int id, string title, string start_datetime, string end_datetime)
         {
             Id = id;
             Title = title;
-            Start_Datetime = start_Datetime;
-            End_Datetime = end_Datetime;
+            Start_Datetime = start_datetime;
+            End_Datetime = end_datetime;
         }
-
-        public Session(string title, string start_Datetime)
+        public Session(string title, string end_datetime, string length)
         {
             Title = title;
-            Start_Datetime = start_Datetime;
+            End_Datetime = end_datetime;
+            Length = length;
         }
     }
 }

@@ -176,11 +176,11 @@ a, a:hover, a:focus, a:active {
 }
 
 .setting-title {
-    border:1px solid purple;
+    border:1px solid rebeccapurple;
     width:fit-content;
     margin-left:auto;
     margin-right:auto;
-    background-color:purple;
+    background-color:rebeccapurple;
     color:white;
     margin-top:10px;
     border-radius:50rem;
@@ -198,7 +198,7 @@ a, a:hover, a:focus, a:active {
 
 .rank-number {
     text-align:center;
-    background-color:purple;
+    background-color:rebeccapurple;
     color:white;
 }
 
@@ -221,7 +221,8 @@ a, a:hover, a:focus, a:active {
 .live {
     color:red;
     width:fit-content;
-    float:right;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 .circle {
@@ -253,7 +254,7 @@ a, a:hover, a:focus, a:active {
 }
 
 .badge-bttv {
-    background-color: #bd1c13;
+    background-color: #BD1C13;
 }
 
 .badge-ffz {
@@ -265,7 +266,7 @@ a, a:hover, a:focus, a:active {
 }
 
 .badge-disabled {
-    background-color: #6c757d;
+    background-color: #6C757D;
 }
 
 .side-link {
@@ -286,36 +287,55 @@ a, a:hover, a:focus, a:active {
 }
 
 .tool-neutral {
-    color: #6c757d;
+    color: #6C757D;
+}
+
+.tool-read {
+    color: #0D6EFD;
 }
 
 .button-not-last {
     margin-right:5px;
 }
 
-
-
-
-.loader {
-    width: 48px;
-    height: 48px;
-    border: 5px solid #FFF;
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
+.prefix-icon {
+    display:inline;
+    margin-right:5px;
 }
 
-@keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-    }
+.tool-row {
+    width:100%;
+}
 
-    100% {
-        transform: rotate(360deg);
-    }
-} 
+.tool-row-tools {
+    width:fit-content;
+    margin-left:auto;
+}
+
+.stack-button:hover {
+    cursor:pointer;
+}
+
+.fa-stack {
+    flex-shrink:0;
+}
+
+.center {
+    text-align:center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -361,5 +381,27 @@ a, a:hover, a:focus, a:active {
         -webkit-transform: scale(2.2);
         transform: scale(2.2);
         opacity: 0;
+    }
+}
+
+
+
+
+
+
+
+.spinner {
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 0.15rem solid #fff;
+    border-bottom: 0.25rem solid rgba(0,0,0,0);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display:inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }

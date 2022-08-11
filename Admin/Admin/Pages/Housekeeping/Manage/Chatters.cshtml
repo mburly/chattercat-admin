@@ -1,0 +1,129 @@
+﻿@page
+@model Admin.Pages.Housekeeping.Manage.ChattersModel
+@{
+	string channel = String.Empty;
+	int chatter_id;
+	try
+	{
+		string[] param = RouteData.Values["HousekeepingTemplate"].ToString().Split('$');
+		int num_params = param.Length;
+		if (num_params == 1)
+		{
+			channel = param[0];
+		}
+		else if(num_params == 2)
+		{
+			channel = param[0];
+			chatter_id = Int32.Parse(param[1]);
+		}
+		else
+		{
+			Response.Redirect("/Housekeeping");
+		}
+	}
+	catch
+	{
+		Response.Redirect("/Housekeeping");
+	}
+
+	@using Admin.Models;
+	@using MySql.Data.MySqlClient;
+	List<Chatter> GetChatters()
+	{
+		List<Chatter> chatters = new List<Chatter>();
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
+		conn.Open();
+		string sql = "SELECT * FROM chatters;";
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		while(rdr.Read())
+		{
+			chatters.Add(new Chatter(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), rdr[3].ToString()));
+		}
+		return chatters;
+	}
+
+	List<Chatter> chatters = new List<Chatter>();
+	try
+	{
+		chatters = GetChatters();
+	}
+	catch
+	{
+		Response.Redirect($"/Housekeeping/Manage/{channel}");
+	}
+}
+<html>
+	<head></head>
+	<body>
+		<div class="holder">
+			<div class="tools">	
+				<div class="tool-group">
+					<div class="tool-group-title">
+						Chatter settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom tool-item-current"><a class="side-link" href="/Housekeeping/Manage/Chatters/@channel">Manage chatters</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Emote settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Emotes/@channel">Manage emotes</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Session settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Sessions/@channel">Manage sessions</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="main-content-holder">
+
+				<div class="manage-holder">
+
+					<div class="banner">
+							<h1 class="banner-channel-name">@channel</h1>
+							<div class="banner-back"><a href="/Housekeeping/Manage/@channel">Return to dashboard</a></div>
+							<div class="banner-back button-not-last"><a href=""><i class="fa-solid fa-arrows-rotate"></i></a></div>
+					</div>
+
+					<div class="settings-holder">
+						<table class="table table-striped">
+							<tr>
+								<th>Username</th>
+								<th>First seen</th>
+								<th>Last seen</th>
+							</tr>
+						@{
+							foreach(Chatter c in chatters)
+							{
+								<tr>
+									<td>@c.Username</td>
+									<td>@c.First_Date</td>
+									<td>@c.Last_Date</td>
+								</tr>
+							}
+						}
+						</table>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+	</body>
+</html>

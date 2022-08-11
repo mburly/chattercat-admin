@@ -1,0 +1,124 @@
+﻿@page
+@model Admin.Pages.Housekeeping.Manage.SessionsModel
+@{
+	string channel = String.Empty;
+	try
+	{
+		channel = RouteData.Values["HousekeepingTemplate"].ToString();
+	}
+	catch
+	{
+		Response.Redirect("/Housekeeping");
+	}
+
+	@using Admin.Models;
+	@using MySql.Data.MySqlClient;
+	List<Session> GetSessions()
+	{
+		List<Session> sessions = new List<Session>();
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
+		conn.Open();
+		string sql = "SELECT * FROM sessions ORDER BY id DESC;";
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		while(rdr.Read())
+		{
+			sessions.Add(new Session(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), rdr[3].ToString()));
+		}
+		return sessions;
+	}
+
+	List<Session> sessions = new List<Session>();
+
+	try
+	{
+		sessions = GetSessions();
+	}
+	catch
+	{
+		Response.Redirect($"/Housekeeping/Manage/{channel}");
+	}
+}
+<html>
+	<head></head>
+	<body>
+		<div class="holder">
+			<div class="tools">	
+				<div class="tool-group">
+					<div class="tool-group-title">
+						Chatter settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Chatters/@channel">Manage chatters</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Emote settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Emotes/@channel">Manage emotes</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Session settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom tool-item-current"><a class="side-link" href="/Housekeeping/Manage/Sessions/@channel">Manage sessions</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="main-content-holder">
+
+				<div class="manage-holder">
+
+					<div class="banner">
+							<h1 class="banner-channel-name">@channel</h1>
+							<div class="banner-back"><a href="/Housekeeping/Manage/@channel">Return to dashboard</a></div>
+							<div class="banner-back button-not-last"><a href=""><i class="fa-solid fa-arrows-rotate"></i></a></div>
+					</div>
+
+					<div class="settings-holder">
+						<table class="table table-striped">
+							<tr class="center">
+								<th>Stream Title</th>
+								<th>Start Datetime</th>
+								<th>End Datetime</th>
+							</tr>
+						@{
+							foreach (Session s in sessions)
+							{
+								<tr>
+									<td>@s.Title</td>
+									<td class="center">@s.Start_Datetime</td>
+									@{
+										if(s.End_Datetime == String.Empty)
+										{
+											<td><div class="live"><div class="circle pulse"></div>LIVE</div></td>
+										}
+										else
+										{
+											<td class="center">@s.End_Datetime</td>
+										}
+									}
+								</tr>
+							}
+						}
+						</table>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+	</body>
+</html>

@@ -52,12 +52,7 @@
 					</div>
 					<div class="tool-group-tools">
 						<ul class="tool-items">
-							<li class="tool-item tool-item-top">Manage chatters</li>
-							<li class="tool-item">Chat logs</li>
-							<li class="tool-item">Chat logs</li>
-							<li class="tool-item">Chat logs</li>
-							<li class="tool-item">Chat logs</li>
-							<li class="tool-item tool-item-bottom">Chat logs</li>
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Chatters/@channel">Manage chatters</a></li>
 						</ul>
 					</div>
 				</div>
@@ -77,17 +72,7 @@
 					</div>
 					<div class="tool-group-tools">
 						<ul class="tool-items">
-							<li class="tool-item tool-item-top tool-item-bottom">Manage sessions</li>
-						</ul>
-					</div>
-				</div>
-				<div class="tool-group not-top">
-					<div class="tool-group-title">
-						User settings
-					</div>
-					<div class="tool-group-tools">
-						<ul class="tool-items">
-							<li class="tool-item tool-item-top tool-item-bottom">Manage users</li>
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Sessions/@channel">Manage sessions</a></li>
 						</ul>
 					</div>
 				</div>
@@ -100,7 +85,7 @@
 					<div class="banner">
 							<h1 class="banner-channel-name">@channel</h1>
 							<div class="banner-back"><a href="/Housekeeping/Manage/@channel">Return to dashboard</a></div>
-							<div class="banner-back button-not-last"><a href="/Housekeeping/Manage/Emotes/@channel"><i class="fa-solid fa-arrows-rotate"></i></a></div>
+							<div class="banner-back button-not-last"><a href=""><i class="fa-solid fa-arrows-rotate"></i></a></div>
 					</div>
 
 					<div class="settings-holder">
@@ -116,13 +101,14 @@
 								<th>Status</th>
 								<th></th>
 							</tr>
-					@{
-						foreach (Emote e in emotes)
-						{
+						@{
+							foreach (Emote e in emotes)
+							{
+								string count = e.Count.ToString("N0"); 
 								<tr>
 								<td><img class="manage-emote" src="https://localhost/chatcat/@e.Path" /></td>
 								<td>@e.Code</td>
-								<td>@e.Count</td>
+								<td>@count</td>
 								<td>@e.Url</td>
 								<td>@e.Path</td>
 								<td>@e.Date_Added.Split(' ')[0]</td>
@@ -161,8 +147,8 @@
 									}
 									}
 									<td>
-									<span class="fa-stack fa-1x" style="flex-shrink: 0;">
-									<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-ban fa-stack-1x fa-inverse"></i>
+									<span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force disable">
+										<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-ban fa-stack-1x fa-inverse"></i>
 									</span>
 									</td>
 								</tr>

@@ -1,0 +1,18 @@
+﻿@page
+@model Admin.Pages.Housekeeping.View.MessagesModel
+@{
+	try
+	{
+		string[] param = RouteData.Values["HousekeepingTemplate"].ToString().Split('$');
+	}
+	catch
+	{
+		Response.Redirect("/Housekeeping");
+	}
+}
+<html>
+	<head></head>
+	<body>
+		<h1></h1>
+	</body>
+</html>

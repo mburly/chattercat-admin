@@ -2,24 +2,9 @@
 @model Admin.Pages.Housekeeping.Manage.ChattersModel
 @{
 	string channel = String.Empty;
-	int chatter_id;
 	try
 	{
-		string[] param = RouteData.Values["HousekeepingTemplate"].ToString().Split('$');
-		int num_params = param.Length;
-		if (num_params == 1)
-		{
-			channel = param[0];
-		}
-		else if(num_params == 2)
-		{
-			channel = param[0];
-			chatter_id = Int32.Parse(param[1]);
-		}
-		else
-		{
-			Response.Redirect("/Housekeeping");
-		}
+		channel = RouteData.Values["HousekeepingTemplate"].ToString();
 	}
 	catch
 	{
@@ -38,7 +23,7 @@
 		MySqlDataReader rdr = cmd.ExecuteReader();
 		while(rdr.Read())
 		{
-			chatters.Add(new Chatter(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), rdr[3].ToString()));
+			chatters.Add(new Chatter(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString().Split(' ')[0], rdr[3].ToString().Split(' ')[0]));
 		}
 		return chatters;
 	}
@@ -95,13 +80,13 @@
 				<div class="manage-holder">
 
 					<div class="banner">
-							<h1 class="banner-channel-name">@channel</h1>
+							<h1 class="banner-channel-name">@channel<span class="page-name"> - chatters</span></h1>
 							<div class="banner-back"><a href="/Housekeeping/Manage/@channel">Return to dashboard</a></div>
 							<div class="banner-back button-not-last"><a href=""><i class="fa-solid fa-arrows-rotate"></i></a></div>
 					</div>
 
 					<div class="settings-holder">
-						<table class="table table-striped">
+						<table class="table table-striped small-table center">
 							<tr>
 								<th>Username</th>
 								<th>First seen</th>

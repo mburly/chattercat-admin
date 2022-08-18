@@ -28,6 +28,17 @@
             Source = source;
             Active = active;
         }
+        public Emote(int id, string code, int count, string url, string path, string date_added, int source, bool active)
+        {
+            Id = id;
+            Code = code;
+            Count = count;
+            Url = url;
+            Path = path;
+            Date_Added = date_added;
+            Source = source;
+            Active = active;
+        }
         public Emote(int id, string code, string emote_id, int count, string url, string path, string date_added, int source, bool active)
         {
             Id = id;

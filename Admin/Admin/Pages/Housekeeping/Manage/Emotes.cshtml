@@ -20,12 +20,12 @@
 		List<Emote> emotes = new List<Emote>();
 		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
 		conn.Open();
-		string sql = "SELECT code, count, url, path, date_added, source, active FROM emotes ORDER BY count DESC;";
+		string sql = "SELECT id, code, emote_id, count, url, path, date_added, source, active FROM emotes ORDER BY count DESC;";
 		MySqlCommand cmd = new MySqlCommand(sql, conn);
 		MySqlDataReader rdr = cmd.ExecuteReader();
 		while(rdr.Read())
 		{
-			emotes.Add(new Emote(rdr[0].ToString(), Int32.Parse(rdr[1].ToString()), rdr[2].ToString(), rdr[3].ToString(), rdr[4].ToString(), Int32.Parse(rdr[5].ToString()), bool.Parse(rdr[6].ToString())));
+			emotes.Add(new Emote(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), Int32.Parse(rdr[3].ToString()), rdr[4].ToString(), rdr[5].ToString(), rdr[6].ToString(), Int32.Parse(rdr[7].ToString()), bool.Parse(rdr[8].ToString())));
 		}
 		return emotes;
 	}
@@ -83,19 +83,18 @@
 				<div class="manage-holder">
 
 					<div class="banner">
-							<h1 class="banner-channel-name">@channel</h1>
+							<h1 class="banner-channel-name">@channel<span class="page-name"> - emotes</span></h1>
 							<div class="banner-back"><a href="/Housekeeping/Manage/@channel">Return to dashboard</a></div>
 							<div class="banner-back button-not-last"><a href=""><i class="fa-solid fa-arrows-rotate"></i></a></div>
 					</div>
 
 					<div class="settings-holder">
 						<table class="table table-striped">
-							<tr>
+							<tr class="center">
 								<th></th>
 								<th>Code</th>
 								<th>Count</th>
 								<th>URL</th>
-								<th>Path</th>
 								<th>Date Added</th>
 								<th>Source</th>
 								<th>Status</th>
@@ -110,7 +109,6 @@
 								<td>@e.Code</td>
 								<td>@count</td>
 								<td>@e.Url</td>
-								<td>@e.Path</td>
 								<td>@e.Date_Added.Split(' ')[0]</td>
 								@{
 									if(e.Source == 1)
@@ -140,17 +138,23 @@
 									if(e.Active)
 									{
 										<td><span class="badge rounded-pill badge-enabled">Enabled</span></td>
+										<td>
+											<a href="/Housekeeping/Action/Disable/@channel$@e.Emote_Id"><span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force disable">
+											<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-ban fa-stack-1x fa-inverse"></i>
+											</span></a>
+										</td>
 									}
 									else
 									{
 										<td><span class="badge rounded-pill badge-disabled">Disabled</span></td>
+										<td>
+											<a href="/Housekeeping/Action/Enable/@channel$@e.Emote_Id"><span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force enable">
+											<i class="fas fa-square fa-stack-2x tool-read"></i><i class="fas fa-check fa-stack-1x fa-inverse"></i>
+											</span></a>
+										</td>
 									}
 									}
 									<td>
-									<span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force disable">
-										<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-ban fa-stack-1x fa-inverse"></i>
-									</span>
-									</td>
 								</tr>
 						}
 					}

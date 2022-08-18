@@ -81,17 +81,17 @@
 				<div class="manage-holder">
 
 					<div class="banner">
-							<h1 class="banner-channel-name">@channel</h1>
+							<h1 class="banner-channel-name">@channel<span class="page-name"> - sessions</span></h1>
 							<div class="banner-back"><a href="/Housekeeping/Manage/@channel">Return to dashboard</a></div>
 							<div class="banner-back button-not-last"><a href=""><i class="fa-solid fa-arrows-rotate"></i></a></div>
 					</div>
 
 					<div class="settings-holder">
-						<table class="table table-striped">
+						<table class="table table-striped small-table">
 							<tr class="center">
 								<th>Stream Title</th>
-								<th>Start Datetime</th>
-								<th>End Datetime</th>
+								<th>Start Time</th>
+								<th>End Time</th>
 							</tr>
 						@{
 							foreach (Session s in sessions)

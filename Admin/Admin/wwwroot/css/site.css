@@ -334,12 +334,59 @@ a, a:hover, a:focus, a:active {
     font-size:1.25rem !important;
 }
 
+.hidden {
+    display:none;
+}
+
+#pages {
+    padding:10px;
+    text-align:center;
+}
+
+.page-current {
+    background-color:rebeccapurple;
+    color: white;
+    font-weight:700;
+}
+
+.page-current:hover {
+    cursor:text !important;
+    text-decoration:none !important;
+}
+
+.page-number {
+    border: 1px solid black;
+    padding:4px;
+}
+
+.page-number:hover {
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+span + span {
+    margin-left:10px;
+}
+
+.emote-url:hover {
+    color: rebeccapurple;
+}
 
 
 
 
 
 
+
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 
 

@@ -372,7 +372,9 @@ span + span {
     color: rebeccapurple;
 }
 
-
+.emote-count-row {
+    padding-left:10rem;
+}
 
 
 

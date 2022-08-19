@@ -7,11 +7,13 @@ try {
     const num_pages = document.getElementById("pages").childElementCount;
     for (let i = 1; i <= num_pages; i++) {
         $('#page-' + i + '-button').click(function () {
-            $('.page-' + i).removeClass('hidden');
-            $('.page-' + cur_page).addClass('hidden');
-            $('.page-current').removeClass('page-current');
-            $('#page-' + i + '-button').addClass('page-current');
-            cur_page = $('.page-current').text();
+            if (cur_page != i) {
+                $('.page-' + i).removeClass('hidden');
+                $('.page-' + cur_page).addClass('hidden');
+                $('.page-current').removeClass('page-current');
+                $('#page-' + i + '-button').addClass('page-current');
+                cur_page = $('.page-current').text();
+            }
         })
     }
 }

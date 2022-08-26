@@ -5,6 +5,7 @@
 	try
 	{
 		channel = RouteData.Values["HousekeepingTemplate"].ToString();
+		ViewData["Title"] = $"{channel} - Manage Emotes";
 	}
 	catch
 	{
@@ -78,6 +79,16 @@
 				</div>
 				<div class="tool-group not-top">
 					<div class="tool-group-title">
+						Message settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Messages/@channel">Manage messages</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
 						Session settings
 					</div>
 					<div class="tool-group-tools">
@@ -100,13 +111,13 @@
 
 					<div class="settings-holder">
 						<table class="table table-striped">
-							<tr class="center">
+							<tr>
 								<th></th>
 								<th>Code</th>
 								<th>Count</th>
 								<th>Source</th>
 								<th>Date Added</th>
-								<th>URL</th>
+								<th class="center">URL</th>
 								<th>Status</th>
 								<th></th>
 							</tr>

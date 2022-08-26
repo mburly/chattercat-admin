@@ -8,10 +8,6 @@ html {
     min-height: 100%;
 }
 
-body {
-    margin-bottom: 60px;
-}
-
 a, a:hover, a:focus, a:active {
     text-decoration: none;
     color: inherit;
@@ -364,7 +360,7 @@ a, a:hover, a:focus, a:active {
     text-decoration:underline;
 }
 
-span + span {
+.page-number + .page-number {
     margin-left:10px;
 }
 
@@ -376,8 +372,10 @@ span + span {
     padding-left:10rem;
 }
 
-
-
+.chat-username {
+    font-family: Inter;
+    font-weight:700;
+}
 
 
 

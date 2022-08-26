@@ -5,6 +5,7 @@
 	try
 	{
 		channel = RouteData.Values["HousekeepingTemplate"].ToString();
+		ViewData["Title"] = $"{channel} - Manage Sessions";
 	}
 	catch
 	{
@@ -18,21 +19,31 @@
 		List<Session> sessions = new List<Session>();
 		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
 		conn.Open();
-		string sql = "SELECT * FROM sessions ORDER BY id DESC;";
+		string sql = "SELECT id, stream_title, start_datetime, end_datetime, TIMESTAMPDIFF(MINUTE, start_datetime, end_datetime) FROM sessions ORDER BY id DESC";
 		MySqlCommand cmd = new MySqlCommand(sql, conn);
 		MySqlDataReader rdr = cmd.ExecuteReader();
 		while(rdr.Read())
 		{
-			sessions.Add(new Session(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), rdr[3].ToString()));
+			sessions.Add(new Session(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), rdr[3].ToString(), rdr[4].ToString()));
 		}
 		return sessions;
 	}
 
 	List<Session> sessions = new List<Session>();
+	int num_pages = 0;
+	int page_number = 1;
 
 	try
 	{
 		sessions = GetSessions();
+		if (sessions.Count % 25 != 0)
+		{
+			num_pages = sessions.Count / 25 + 1;
+		}
+		else
+		{
+			num_pages = sessions.Count / 25;
+		}
 	}
 	catch
 	{
@@ -61,6 +72,16 @@
 					<div class="tool-group-tools">
 						<ul class="tool-items">
 							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Emotes/@channel">Manage emotes</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Message settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Messages/@channel">Manage messages</a></li>
 						</ul>
 					</div>
 				</div>
@@ -113,6 +134,26 @@
 							}
 						}
 						</table>
+						<div id="pages" class="noselect">
+						@{
+							for (int i = 1; i <= num_pages; i++)
+							{
+								if(i > 3 && num_pages > 25 && i < num_pages - 3)	// list the last 3 pages if page count is > 25
+								{
+									i = num_pages - 2;
+									<span>...</span>
+								}
+								if (i == 1)
+								{
+									<span class="page-number page-current" id="page-@i-button">@i</span>
+								}
+								else
+								{
+									<span class="page-number" id="page-@i-button">@i</span>
+								}
+							}
+						}
+						</div>
 					</div>
 
 				</div>

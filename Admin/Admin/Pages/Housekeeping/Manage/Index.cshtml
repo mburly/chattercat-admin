@@ -5,6 +5,7 @@
 	try
 	{
 		channel = RouteData.Values["HousekeepingTemplate"].ToString();
+		ViewData["Title"] = channel;
 	}
 	catch
 	{
@@ -72,7 +73,7 @@
 		MySqlDataReader rdr = cmd.ExecuteReader();
 		while(rdr.Read())
 		{
-			recent_sessions.Add(new Session(rdr[0].ToString(), rdr[1].ToString(), rdr[2].ToString()));
+			recent_sessions.Add(new Session(Int32.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), rdr[3].ToString()));
 		}
 		conn.Close();
 		return recent_sessions;
@@ -134,6 +135,16 @@
 				</div>
 				<div class="tool-group not-top">
 					<div class="tool-group-title">
+						Message settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Messages/@channel">Manage messages</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
 						Session settings
 					</div>
 					<div class="tool-group-tools">
@@ -174,31 +185,21 @@
 															if(status == "online")
 															{
 																<td class="rank-number">@rank</td>
-																<td class="">@top_chatters[i].Username</td>
+																<td class="chat-username"><a href="/Housekeeping/Manage/Messages/@channel$@top_chatters[i].Username">@top_chatters[i].Username</a></td>
 																<td class="">@message_count</td>
 																<td class="tool-row">
 																	<div class="tool-row-tools">
-																		<span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Messages sent this session">
+																		<a href="/Housekeeping/Manage/Messages/@channel$@recent_sessions.First().Id$@top_chatters[i].Username"><span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Messages sent this session">
 																			<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-commenting fa-stack-1x fa-inverse"></i>
-																		</span>
-																		<span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="All messages sent">
-																			<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-comments fa-stack-1x fa-inverse"></i>
-																		</span>
+																		</span></a>
 																	</div>
 																</td>
 															}
 															else
 															{
 																<td class="rank-number">@rank</td>
-																<td class="">@top_chatters[i].Username</td>
+																<td class="chat-username"><a href="/Housekeeping/Manage/Messages/@channel$@top_chatters[i].Username">@top_chatters[i].Username</a></td>
 																<td class="">@message_count</td>
-																<td class="tool-row">
-																	<div class="tool-row-tools">
-																		<span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="All messages sent">
-																				<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-comments fa-stack-1x fa-inverse"></i>
-																		</span>
-																	</div>
-																</td>
 															}	
 													}
 														</tr>

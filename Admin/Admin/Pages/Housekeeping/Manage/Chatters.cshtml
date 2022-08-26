@@ -5,6 +5,7 @@
 	try
 	{
 		channel = RouteData.Values["HousekeepingTemplate"].ToString();
+		ViewData["Title"] = $"{channel} - Manage Chatters";
 	}
 	catch
 	{
@@ -29,14 +30,25 @@
 	}
 
 	List<Chatter> chatters = new List<Chatter>();
+	int num_pages = 0;
+	int page_number = 1;
 	try
 	{
 		chatters = GetChatters();
+		if (chatters.Count % 25 != 0)
+		{
+			num_pages = chatters.Count / 25 + 1;
+		}
+		else
+		{
+			num_pages = chatters.Count / 25;
+		}
 	}
 	catch
 	{
 		Response.Redirect($"/Housekeeping/Manage/{channel}");
 	}
+
 }
 <html>
 	<head></head>
@@ -60,6 +72,16 @@
 					<div class="tool-group-tools">
 						<ul class="tool-items">
 							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Emotes/@channel">Manage emotes</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Message settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Messages/@channel">Manage messages</a></li>
 						</ul>
 					</div>
 				</div>
@@ -100,20 +122,41 @@
 								{
 									display = "hidden";
 								}
-								<tr class="@display">
-									<td>@chatters[i].Username</td>
+								if(i % 25 == 0 && i != 0)
+								{
+									page_number += 1;
+								}
+								<tr class="page-@page_number @display">
+									<td class="chat-username"><a href="/Housekeeping/Manage/Messages/@channel$@chatters[i].Username">@chatters[i].Username</a></td>
 									<td>@chatters[i].First_Date</td>
 									<td>@chatters[i].Last_Date</td>
 								</tr>
 							}
 						}
 						</table>
+						<div id="pages" class="noselect">
+						@{
+							for (int i = 1; i <= num_pages; i++)
+							{
+								if(i > 3 && num_pages > 25 && i < num_pages - 3)	// list the last 3 pages if page count is > 25
+								{
+									i = num_pages - 2;
+									<span>...</span>
+								}
+								if (i == 1)
+								{
+									<span class="page-number page-current" id="page-@i-button">@i</span>
+								}
+								else
+								{
+									<span class="page-number" id="page-@i-button">@i</span>
+								}
+							}
+						}
+						</div>
 					</div>
-
 				</div>
-
 			</div>
-
 		</div>
 	</body>
 </html>

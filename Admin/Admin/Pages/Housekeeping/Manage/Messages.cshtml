@@ -1,18 +1,229 @@
 ﻿@page
 @model Admin.Pages.Housekeeping.View.MessagesModel
 @{
+	@using Admin.Models;
+	@using MySql.Data.MySqlClient;
+
+	string arg = String.Empty;
+	string[] args = new string[] { };           // ???
+	string channel = String.Empty;
+	int session_id = -1;
+	int num_pages = 0;
+	int page_number = 1;
+	string chatter_name = String.Empty;
+	int num_args = 0;
+	List<Message> messages = new List<Message>();
 	try
 	{
-		string[] param = RouteData.Values["HousekeepingTemplate"].ToString().Split('$');
+		arg = RouteData.Values["HousekeepingTemplate"].ToString();
+		if (arg.Contains('$'))
+		{
+			if (arg == "$")
+				Response.Redirect("/Housekeeping");
+			args = arg.Split('$');
+			num_args = args.Length;
+			if(num_args > 3)
+			{
+				Response.Redirect("/Housekeeping");
+			}
+			else if(num_args == 3)
+			{
+				// /channel$session_id$username
+				channel = args[0];
+				session_id = Int32.Parse(args[1]);
+				chatter_name = args[2];
+				if(channel == String.Empty || chatter_name == String.Empty)
+				{
+					Response.Redirect("/Housekeeping");
+				}
+			}
+			else if(num_args == 2)
+			{
+				int number;
+				channel = args[0];
+				// /channel$session_id
+				if(int.TryParse(args[1], out number))
+				{
+					session_id = number;
+				}
+				// /channel$username
+				else
+				{
+					chatter_name = args[1];
+				}
+			}
+			else
+			{
+				// /channel
+				channel = args[0];
+				if(channel == String.Empty)
+				{
+					Response.Redirect("/Housekeeping");
+				}
+			}
+		}
+		else
+		{
+			channel = arg;
+			if(channel == String.Empty)
+			{
+				Response.Redirect("/Housekeeping");
+			}
+		}
+
+		messages = GetMessages();
+		if (messages.Count % 25 != 0)
+		{
+			num_pages = messages.Count / 25 + 1;
+		}
+		else
+		{
+			num_pages = messages.Count / 25;
+		}
 	}
 	catch
 	{
 		Response.Redirect("/Housekeeping");
 	}
+
+	List<Message> GetMessages()
+	{
+		List<Message> messages = new List<Message>();
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
+		conn.Open();
+		string sql = String.Empty;
+
+		if (session_id == -1 && chatter_name == String.Empty)
+		{
+			sql = "SELECT c.username, m.message, m.datetime FROM messages m INNER JOIN chatters c ON m.chatter_id = c.id ORDER BY m.id DESC";
+		}
+		else if (session_id == -1)
+		{
+			sql = $"SELECT message, datetime FROM messages WHERE chatter_id = (SELECT id FROM chatters WHERE username = \"{chatter_name}\") ORDER BY id DESC";
+		}
+		else if(chatter_name == String.Empty)
+		{
+			sql = $"SELECT c.username, m.message, m.datetime FROM messages m INNER JOIN chatters c ON m.chatter_id = c.id WHERE m.session_id = {session_id} ORDER BY m.id DESC";
+		}
+		else
+		{
+			sql = $"SELECT message, datetime FROM messages WHERE chatter_id = (SELECT id FROM chatters WHERE username = \"{chatter_name}\") AND session_id = {session_id} ORDER BY id DESC";
+		}
+
+		MySqlCommand cmd = new MySqlCommand(sql, conn);
+		MySqlDataReader rdr = cmd.ExecuteReader();
+		while (rdr.Read())
+		{
+			if (chatter_name == String.Empty)
+				messages.Add(new Message(rdr[0].ToString(), rdr[1].ToString(), rdr[2].ToString()));
+			else
+				messages.Add(new Message(chatter_name, rdr[0].ToString(), rdr[1].ToString()));
+		}
+
+		return messages;
+	}
+
 }
 <html>
 	<head></head>
 	<body>
-		<h1></h1>
+		<div class="holder">
+			<div class="tools">	
+				<div class="tool-group">
+					<div class="tool-group-title">
+						Chatter settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Chatters/@channel">Manage chatters</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Emote settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Emotes/@channel">Manage emotes</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Message settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom tool-item-current"><a class="side-link" href="/Housekeeping/Manage/Messages/@channel">Manage messages</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tool-group not-top">
+					<div class="tool-group-title">
+						Session settings
+					</div>
+					<div class="tool-group-tools">
+						<ul class="tool-items">
+							<li class="tool-item tool-item-top tool-item-bottom"><a class="side-link" href="/Housekeeping/Manage/Sessions/@channel">Manage sessions</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="main-content-holder">
+
+				<div class="manage-holder">
+
+					<div class="banner">
+							<h1 class="banner-channel-name">@channel<span class="page-name"> - messages</span></h1>
+							<div class="banner-back"><a href="/Housekeeping/Manage/@channel">Return to dashboard</a></div>
+							<div class="banner-back button-not-last"><a href=""><i class="fa-solid fa-arrows-rotate"></i></a></div>
+					</div>
+
+					<div class="settings-holder">
+						@{
+							string display = String.Empty;
+							for (int i = 0; i < messages.Count; i++)
+							{
+								if (i == 25)
+								{
+									display = "hidden";
+								}
+								if(i % 25 == 0 && i != 0)
+								{
+									page_number += 1;
+								}
+								<div class="chat-message page-@page_number @display">
+									<span class="chat-timestamp">@messages[i].Datetime</span>
+									<a href="/Housekeeping/Manage/Messages/@channel$@messages[i].Username"><span class="chat-username">@messages[i].Username:</span></a>
+									<span class="chat-message">@messages[i].Text</span>
+								</div>
+							}
+						}
+						<div id="pages" class="noselect">
+						@{
+							for (int i = 1; i <= num_pages; i++)
+							{
+								if(i > 3 && num_pages > 25 && i < num_pages - 3)	// list the last 3 pages if page count is > 25
+								{
+									i = num_pages - 2;
+									<span>...</span>
+								}
+								if (i == 1)
+								{
+									<span class="page-number page-current" id="page-@i-button">@i</span>
+								}
+								else
+								{
+									<span class="page-number" id="page-@i-button">@i</span>
+								}
+							}
+						}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

@@ -3,10 +3,34 @@
 
 // Write your JavaScript code.
 try {
-    pagination();
+
+
+    $(document).ready(function () {
+        document.getElementsByTagName("html")[0].style.visibility = "visible";
+    });
+
+
+    // Convert dates to local time
+    if (document.querySelector('.datetime') !== null) {
+        convertDatesToLocalTime();
+    }
+
+
+    // Handle pagination for content
+    if (document.querySelector('#pages') !== null) {
+        pagination();
+    }
 }
 catch {
 
+}
+
+function convertDatesToLocalTime() {
+    var datetimes = document.getElementsByClassName("datetime");
+    for (let i = 0; i < datetimes.length; i++) {
+        var date = new Date(datetimes[i].textContent + ' UTC');
+        datetimes[i].textContent = date.toLocaleString('en-US');
+    }
 }
 
 function pagination() { 

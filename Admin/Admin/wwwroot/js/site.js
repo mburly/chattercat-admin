@@ -4,12 +4,6 @@
 // Write your JavaScript code.
 try {
 
-
-    $(document).ready(function () {
-        document.getElementsByTagName("html")[0].style.visibility = "visible";
-    });
-
-
     // Convert dates to local time
     if (document.querySelector('.datetime') !== null) {
         convertDatesToLocalTime();
@@ -20,6 +14,7 @@ try {
     if (document.querySelector('#pages') !== null) {
         pagination();
     }
+
 }
 catch {
 
@@ -28,16 +23,23 @@ catch {
 function convertDatesToLocalTime() {
     var datetimes = document.getElementsByClassName("datetime");
     for (let i = 0; i < datetimes.length; i++) {
-        var date = new Date(datetimes[i].textContent + ' UTC');
-        datetimes[i].textContent = date.toLocaleString('en-US');
+        var datetime = new Date(datetimes[i].textContent + ' UTC').toLocaleString('en-US').split(',');
+        var date = datetime[0];
+        var time = datetime[1];
+
+        var time_segments = time.split(':');
+        time = time_segments[0].trim() + ':' + time_segments[1] + ' ' + time_segments[2].split(' ')[1];
+
+        datetimes[i].textContent = date + ' ' + time;
     }
 }
 
 function pagination() { 
-    var cur_page = $('.page-current').text();
+    var cur_page = parseInt($('.page-current').text());
     const num_pages = document.getElementById("pages").childElementCount;
     var pages = document.getElementById("pages");
     var page_numbers = Array();
+
     for (let i = 0; i < num_pages; i++) {
         var num = parseInt(pages.children[i].textContent);
         if(!isNaN(num))
@@ -52,6 +54,30 @@ function pagination() {
             cur_page = $('.page-current').text();
         }
     }));
+
+    if (document.querySelector('.page-arrow') !== null) {
+        $('#arrowLeft').click(function () {
+            if (cur_page != 1) {
+                var page_num = cur_page - 1;
+                $('.page-' + page_num).removeClass('hidden');
+                $('.page-' + cur_page).addClass('hidden');
+                $('.page-current').removeClass('page-current');
+                $('#page-' + page_num + '-button').addClass('page-current');
+                cur_page = parseInt($('.page-current').text());
+            }
+        });
+
+        $('#arrowRight').click(function () {
+            if (cur_page != page_numbers[page_numbers.length - 1]) {
+                var page_num = cur_page + 1;
+                $('.page-' + page_num).removeClass('hidden');
+                $('.page-' + cur_page).addClass('hidden');
+                $('.page-current').removeClass('page-current');
+                $('#page-' + page_num + '-button').addClass('page-current');
+                cur_page = parseInt($('.page-current').text());
+            }
+        });
+    }
 
 }
 

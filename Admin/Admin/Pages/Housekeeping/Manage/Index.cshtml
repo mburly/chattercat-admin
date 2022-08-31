@@ -11,13 +11,13 @@
 	{
 		Response.Redirect("/Housekeeping");
 	}
-	string db = $"cc_{channel}";
+
 	@using MySql.Data.MySqlClient
 	@using Admin.Models
 
 	bool IsOnline()
 	{
-		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		MySqlConnection conn = new MySqlConnection($"server={Constants.Config.Host};port=3306;database=cc_{channel};uid={Constants.Config.User};password={Constants.Config.Password};");
 		conn.Open();
 		string sql = "SELECT end_datetime FROM sessions ORDER BY ID DESC LIMIT 1";
 		MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -34,7 +34,7 @@
 	List<Emote> GetTopEmotes()
 	{
 		List<Emote> top_emotes = new List<Emote>();
-		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
 		conn.Open();
 		string sql = "CALL topEmotes";
 		MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -50,7 +50,7 @@
 	List<Chatter> GetTopChatters()
 	{
 		List<Chatter> top_chatters = new List<Chatter>();
-		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
 		conn.Open();
 		string sql = "CALL topChatters";
 		MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -66,7 +66,7 @@
 	List<Session> GetRecentSessions()
 	{
 		List<Session> recent_sessions = new List<Session>();
-		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
 		conn.Open();
 		string sql = "CALL recentSessions";
 		MySqlCommand cmd = new MySqlCommand(sql, conn);

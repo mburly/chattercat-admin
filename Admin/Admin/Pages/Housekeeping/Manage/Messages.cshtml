@@ -89,7 +89,7 @@
 	List<Message> GetMessages()
 	{
 		List<Message> messages = new List<Message>();
-		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
+		MySqlConnection conn = new MySqlConnection($"server={Constants.Config.Host};port=3306;database=cc_{channel};uid={Constants.Config.User};password={Constants.Config.Password};");
 		conn.Open();
 		string sql = String.Empty;
 

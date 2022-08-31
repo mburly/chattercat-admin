@@ -23,7 +23,7 @@ namespace Admin.Pages.Housekeeping.Action
 
 			try
 			{
-				MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database=cc_{channel};uid=root;password=;");
+				MySqlConnection conn = new MySqlConnection($"server={Constants.Config.Host};port=3306;database=cc_{channel};uid={Constants.Config.User};password={Constants.Config.Password};");
 				conn.Open();
 				string sql = $"UPDATE emotes SET active = 0 WHERE emote_id = \"{emote_id}\"";
 				MySqlCommand cmd = new MySqlCommand(sql, conn);

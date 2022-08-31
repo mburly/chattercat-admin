@@ -12,14 +12,13 @@
 		Response.Redirect("/Housekeeping");
 	}
 
-	string db = $"cc_{channel}";
 	@using Admin.Models;
 	@using MySql.Data.MySqlClient;
 
 	List<Emote> GetEmotes()
 	{
 		List<Emote> emotes = new List<Emote>();
-		MySqlConnection conn = new MySqlConnection($"server=localhost;port=3306;database={db};uid=root;password=;");
+		MySqlConnection conn = new MySqlConnection($"server={Constants.Config.Host};port=3306;database=cc_{channel};uid={Constants.Config.User};password={Constants.Config.Password};");
 		conn.Open();
 		string sql = "SELECT id, code, emote_id, count, url, path, date_added, source, active FROM emotes ORDER BY count DESC;";
 		MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -134,57 +133,57 @@
 									page_number += 1;
 								}
 								string count = emotes[i].Count.ToString("N0"); 
-								<tr class="page-@page_number @display">
-									<td><img class="manage-emote" src="https://localhost/chatcat/@emotes[i].Path" /></td>
-									<td>@emotes[i].Code</td>
-									<td>@count</td>
-									@{
+									<tr class="page-@page_number @display">
+										<td><img class="manage-emote" src="https://localhost/chatcat/@emotes[i].Path" /></td>
+										<td>@emotes[i].Code</td>
+										<td>@count</td>
+										@{
 										if(emotes[i].Source == 1)
 										{
-											<td><span class="badge badge-twitch">Twitch</span></td>
+													<td><span class="badge badge-twitch">Twitch</span></td>
 										}
 										else if(emotes[i].Source == 2)
 										{
-											<td><span class="badge badge-twitch">Subscriber</span></td>
+													<td><span class="badge badge-twitch">Subscriber</span></td>
 										}
 										else if(emotes[i].Source == 3)
 										{
-											<td><span class="badge badge-ffz">FFZ</span></td>
+													<td><span class="badge badge-ffz">FFZ</span></td>
 										}
 										else if(emotes[i].Source == 4)
 										{
-											<td><span class="badge badge-ffz">FFZ</span></td>
+													<td><span class="badge badge-ffz">FFZ</span></td>
 										}
 										else if(emotes[i].Source == 5)
 										{
-											<td><span class="badge badge-bttv">BTTV</span></td>
+													<td><span class="badge badge-bttv">BTTV</span></td>
 										}
 										else if(emotes[i].Source == 6)
 										{
-											<td><span class="badge badge-bttv">BTTV</span></td>
+													<td><span class="badge badge-bttv">BTTV</span></td>
 										}
-										<td>@emotes[i].Date_Added.Split(' ')[0]</td>
-										<td><a href="@emotes[i].Url"><span class="emote-url">@emotes[i].Url</span></a></td>
+												<td>@emotes[i].Date_Added.Split(' ')[0]</td>
+												<td><a href="@emotes[i].Url"><span class="emote-url">@emotes[i].Url</span></a></td>
 										if(emotes[i].Active)
 										{
-											<td><span class="badge rounded-pill badge-enabled">Enabled</span></td>
-											<td>
-												<a href="/Housekeeping/Action/Disable/@channel$@emotes[i].Emote_Id"><span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force disable">
-												<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-ban fa-stack-1x fa-inverse"></i>
-												</span></a>
-											</td>
+													<td><span class="badge rounded-pill badge-enabled">Enabled</span></td>
+													<td>
+														<a href="/Housekeeping/Action/Disable/@channel$@emotes[i].Emote_Id"><span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force disable">
+														<i class="fas fa-square fa-stack-2x tool-neutral"></i><i class="fas fa-ban fa-stack-1x fa-inverse"></i>
+														</span></a>
+													</td>
 										}
 										else
 										{
-											<td><span class="badge rounded-pill badge-disabled">Disabled</span></td>
-											<td>
-												<a href="/Housekeeping/Action/Enable/@channel$@emotes[i].Emote_Id"><span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force enable">
-												<i class="fas fa-square fa-stack-2x tool-read"></i><i class="fas fa-check fa-stack-1x fa-inverse"></i>
-												</span></a>
-											</td>
+													<td><span class="badge rounded-pill badge-disabled">Disabled</span></td>
+													<td>
+														<a href="/Housekeeping/Action/Enable/@channel$@emotes[i].Emote_Id"><span class="fa-stack fa-1x stack-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force enable">
+														<i class="fas fa-square fa-stack-2x tool-read"></i><i class="fas fa-check fa-stack-1x fa-inverse"></i>
+														</span></a>
+													</td>
 										}
-									}
-								</tr>
+										}
+									</tr>
 						}
 					}
 						</table>
@@ -194,11 +193,11 @@
 							{
 								if (i == 1)
 								{
-									<span class="page-number page-current" id="page-@i-button">@i</span>
+										<span class="page-number page-current" id="page-@i-button">@i</span>
 								}
 								else
 								{
-									<span class="page-number" id="page-@i-button">@i</span>
+										<span class="page-number" id="page-@i-button">@i</span>
 								}
 							}
 						}

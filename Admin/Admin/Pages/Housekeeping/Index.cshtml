@@ -12,7 +12,7 @@
 	List<string> GetDatabases()
 	{
 		List<string> databases = new List<string>();
-		MySqlConnection conn = new MySqlConnection("server=localhost;port=3306;uid=root;password=;");
+		MySqlConnection conn = new MySqlConnection($"server={Constants.Config.Host};port=3306;uid={Constants.Config.User};password={Constants.Config.Password};");
 		conn.Open();
 		string sql = "SHOW DATABASES";
 		MySqlCommand cmd = new MySqlCommand(sql, conn);

@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
 
 namespace Admin.Pages.Housekeeping.Action
 {
+	[AllowAnonymous]
     public class DisableModel : PageModel
     {
         public void OnGet()
@@ -28,7 +30,10 @@ namespace Admin.Pages.Housekeeping.Action
 				string sql = $"UPDATE emotes SET active = 0 WHERE emote_id = \"{emote_id}\"";
 				MySqlCommand cmd = new MySqlCommand(sql, conn);
 				cmd.ExecuteNonQuery();
-				Response.Redirect($"/Housekeeping/Manage/Emotes/{channel}");
+                sql = $"UPDATE logs SET user_id = \"{User.Identity.Name}\" WHERE id = (SELECT id FROM logs ORDER BY id DESC LIMIT 1)";
+                cmd = new MySqlCommand(sql, conn);
+                cmd.ExecuteNonQuery();
+                Response.Redirect($"/Housekeeping/Manage/Emotes/{channel}");
 			}
 			catch
 			{
